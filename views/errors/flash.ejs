@@ -1,0 +1,31 @@
+<% if(messages.danger){%>
+    <div class="alert alert-danger">
+        <button class="close" data-close="alert"></button>
+        <span><strong><%- messages.danger %></strong></span>
+    </div>
+<%}%>
+<% if(messages.error){%>
+    <div class="alert alert-danger">
+        <button class="close" data-close="alert"></button>
+        <span><strong><%- messages.error %></strong></span>
+    </div>
+<%}%>
+<% if(messages.info){%>
+    <div class="alert alert-info">
+        <button class="close" data-close="alert"></button>
+        <span><strong><%- messages.info %></strong></span>
+    </div>
+<%}%>
+<% if(messages.success){%>
+    <div class="alert alert-success">
+        <button class="close" data-close="alert"></button>
+        <span><strong><%- messages.success %></strong></span>
+    </div>
+<%}%>
+<% if(typeof messages.errors !="undefined" && messages.errors.length){%>
+    <ul class="bg-danger">
+        <% messages.errors.forEach(function (error) {%>
+        <li class="text-white"><%- error %></li>
+        <%}); %>
+    </ul>
+<%}%>

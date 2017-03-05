@@ -1,0 +1,204 @@
+<% layout('layout/default') %>
+
+<% block('plugin_css').append('<link href="../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>') %>
+<% block('plugin_css').append('<link href="../assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>') %>
+<% block('plugin_css').append('<link href="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css"/>') %>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <!-- BEGIN PAGE HEAD-->
+        <div class="page-head">
+            <div class="container">
+                <!-- BEGIN PAGE TITLE -->
+                <div class="page-title">
+                    <h1>Product Tasks</h1>
+                </div>
+                <!-- END PAGE TITLE -->
+            </div>
+        </div>
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE CONTENT BODY -->
+        <div class="page-content">
+            <div class="container">
+                <!-- BEGIN PAGE BREADCRUMBS -->
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                        <i class="fa fa-circle"></i>
+                    </li>
+                    <li><span>Tasks</span></li>
+                    <li><i class="fa fa-circle"></i> </li>
+                    <li><i class="glyphicon glyphicon-calendar"></i> <%= new Date(Date.now()).toDateString()  %></li>
+                    <li><i class="fa fa-circle"></i> </li>
+                    <li><i class="glyphicon glyphicon-time"></i> <span id="timer"></span></li>
+                </ul>
+                <!-- END PAGE BREADCRUMBS -->
+                <% include ../../errors/flash %>
+                <!-- BEGIN PAGE CONTENT INNER -->
+                <div class="page-content-inner">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-list font-green"></i>
+                                <span class="caption-subject font-green bold uppercase">Tasks </span>
+                            </div>
+                            <span class="pull-right"><i class="fa fa-plus"></i> <a href="/tasks/create">Add New</a></span>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-md-8 col-md-offset-2 margin-bottom-20 margin-top-20">
+                                    <form method="post" action="/tasks/module" role="form" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Products: </label>
+                                            <div class="col-md-6">
+                                                <div class="col-md-9">
+                                                    <select class="form-control bs-select" name="product" id="product" required>
+                                                        <option value="">- Select Product -</option>
+                                                        <% if(typeof products != "undefined"){ %>
+                                                            <% products.forEach(function (product) {%>
+                                                                <% if(product._id.equals(prodFilter)) { %>
+                                                                    <option selected value="<%- product._id %>"><%- product.name %></option>
+                                                                <% } else {%>
+                                                                    <option value="<%- product._id %>"><%- product.name %></option>
+                                                                <% } %>
+                                                            <%}); %>
+                                                        <% }%>
+                                                        <option value="0" <%- (prodFilter == 0) ? 'selected' : ''%>>ALL PRODUCTS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Modules: </label>
+                                            <div class="col-md-6">
+                                                <div class="col-md-9">
+                                                    <select class="bs-select form-control" id="module" name="module">
+                                                        <% if(typeof modules != "undefined"){ %>
+                                                            <% modules.forEach(function (module) {%>
+                                                                <% if(module._id.equals(modFilter)) { %>
+                                                                    <option selected value="<%- module._id %>"><%- module.name %></option>
+                                                                <% } else {%>
+                                                                    <option value="<%- module._id %>"><%- module.name %></option>
+                                                                <% } %>
+                                                            <%}); %>
+                                                        <% }%>
+                                                        <option value="0" <%- (modFilter == 0) ? 'selected' : ''%>>ALL MODULES</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-primary pull-right" type="submit">Filter</button>
+                                                </div>
+                                            </div>
+                                            <div class="caption pull-right">
+                                                <h4><span class="font-blue sbold uppercase"><%- tasks.length %> Tasks</span></h4>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <form method="post" id="menu_form">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped table-actions" id="task_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 1%;">#</th>
+                                                        <th style="width: 25%;">Task</th>
+                                                        <th style="width: 15%;">Module</th>
+                                                        <th style="width: 15%;">Product</th>
+                                                        <th style="width: 5%;" colspan="2">Steps</th>
+                                                        <th style="width: 10%;">Status</th>
+                                                        <th style="width: 8%;">Order</th>
+                                                        <th style="width: 5%;">View</th>
+                                                        <th style="width: 5%;">Edit</th>
+                                                        <th style="width: 5%;">Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th style="width: 1%;">#</th>
+                                                        <th style="width: 25%;">Task</th>
+                                                        <th style="width: 15%;">Module</th>
+                                                        <th style="width: 15%;">Product</th>
+                                                        <th style="width: 5%;" colspan="2">Steps</th>
+                                                        <th style="width: 10%;">Status</th>
+                                                        <th style="width: 8%;">Order</th>
+                                                        <th style="width: 5%;">View</th>
+                                                        <th style="width: 5%;">Edit</th>
+                                                        <th style="width: 5%;">Delete</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                <% if(tasks && tasks.length > 0) { %>
+                                                    <% for(var i = 0; i < tasks.length; i++) { %>
+                                                        <tr>
+                                                            <td class="text-center"><%= (i+1) %> </td>
+                                                            <td><%= tasks[i].name %></td>
+                                                            <td><%= tasks[i].module.name %></td>
+                                                            <td><%= tasks[i].product.name %></td>
+                                                            <td>
+                                                                <a target="_blank" href="/steps/<%= tasks[i]._id %>" class="btn btn-default btn-rounded btn-condensed btn-xs">
+                                                                    <span class="fa fa-gears"></span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a target="_blank" href="/tasks/steps/<%= tasks[i]._id %>" class="btn btn-primary btn-rounded btn-condensed btn-xs">
+                                                                    <span class="fa fa-eye"></span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <% if(tasks[i].active == true) { %>
+                                                                    <span class="label label-success"><i class="fa fa-thumbs-up"></i> Active</span>
+                                                                <% } else { %>
+                                                                    <span class="label label-danger"><i class="fa fa-thumbs-down"></i> Inactive</span>
+                                                                <% } %>
+                                                            </td>
+                                                            <td><%= (typeof tasks[i].order_by != 'undefined') ? tasks[i].order_by : 1 %></td>
+                                                            <td>
+                                                                <a target="_blank" href="/tasks/<%= tasks[i]._id %>" class="btn btn-info btn-rounded btn-condensed btn-xs">
+                                                                    <span class="fa fa-eye"></span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a target="_blank" href="/tasks/edit/<%= tasks[i]._id %>" class="btn btn-warning btn-rounded btn-condensed btn-xs">
+                                                                    <span class="fa fa-edit"></span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-rounded btn-condensed btn-xs delete_task" value="<%= tasks[i]._id %>">
+                                                                    <span class="fa fa-trash-o"></span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <% } %>
+                                                <% }else { %>
+                                                    <tr>
+                                                        <th class="text-center" colspan="11">No Record Found</th>
+                                                    </tr>
+                                                <% }%>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT INNER -->
+            </div>
+        </div>
+        <!-- END PAGE CONTENT BODY -->
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<% block('plugin_js').append('<script src="../assets/global/scripts/datatable.js" type="text/javascript"></script>') %>
+<% block('plugin_js').append('<script src="../assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>') %>
+<% block('plugin_js').append('<script src="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>') %>
+<% block('plugin_js').append('<script src="../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>') %>
+
+<% block('plugin_js').append('<script src="../custom/js/tasks/task.js" type="text/javascript"></script>') %>

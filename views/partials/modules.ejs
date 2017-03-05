@@ -1,0 +1,6 @@
+ <option value="">-- Select Module --</option>
+<% if(typeof modules != "undefined" && modules.length > 0){ %>
+    <% modules.forEach(function (module) {%>
+        <option value="<%- module._id %>"><%- module.name %></option>
+    <%}); %>
+<% }%>

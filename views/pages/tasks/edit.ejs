@@ -1,0 +1,143 @@
+<% layout('layout/default') %>
+
+<% block('plugin_css').append('<link href="/assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css"/>') %>
+<% block('plugin_css').append('<link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>') %>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <!-- BEGIN PAGE HEAD-->
+        <div class="page-head">
+            <div class="container">
+                <!-- BEGIN PAGE TITLE -->
+                <div class="page-title">
+                    <h1>Modify An Existing Tasks</h1>
+                </div>
+                <!-- END PAGE TITLE -->
+            </div>
+        </div>
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE CONTENT BODY -->
+        <div class="page-content">
+            <div class="container">
+                <!-- BEGIN PAGE BREADCRUMBS -->
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                        <i class="fa fa-circle"></i>
+                    </li>
+                    <li>
+                        <a href="/tasks">Tasks</a>
+                        <i class="fa fa-square"></i>
+                    </li>
+                    <li><span>Modify An Existing Task</span></li>
+                    <li><i class="fa fa-circle"></i> </li>
+                    <li><i class="glyphicon glyphicon-calendar"></i> <%= new Date(Date.now()).toDateString()  %></li>
+                    <li><i class="fa fa-circle"></i> </li>
+                    <li><i class="glyphicon glyphicon-time"></i> <span id="timer"></span></li>
+                </ul>
+                <!-- END PAGE BREADCRUMBS -->
+                <% include ../../errors/flash %>
+                <!-- BEGIN PAGE CONTENT INNER -->
+                <div class="page-content-inner">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-list font-green"></i>
+                                <span class="caption-subject font-green bold uppercase">Modify Tasks</span>
+                            </div>
+                            <span class="pull-right font-blue bold uppercase"><i class="fa fa-eye"></i> <a href="/tasks/steps/<%= task._id %>">Preview Steps</a></span>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <form method="post" action="/tasks/edit/<%- task._id %>" accept-charset="UTF-8" class="form-horizontal" role="form">
+                                    <input type="hidden" name="_id" value="<%- task._id %>">
+                                    <div class="col-md-6 col-md-offset-3">
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label>Task Title</label>
+                                                <div class="input-icon">
+                                                    <i class="fa fa-user"></i>
+                                                    <input type="text" class="form-control" required name="name" placeholder="Task Title" value="<%- task.name %>"> </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Order By</label>
+                                                <div class="input-icon">
+                                                    <i class="fa fa-user"></i>
+                                                    <input type="number" class="form-control" required name="order_by" placeholder="Order By" value="<%- task.order_by %>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Product</label>
+                                                <div>
+                                                    <select class="bs-select form-control" required="required" id="product_id" name="product">
+                                                        <option value="">-- Select Product --</option>
+                                                        <% if(typeof products != "undefined"){ %>
+                                                            <% products.forEach(function (product) {%>
+                                                                <% if(product._id.equals(task.product)){ %>
+                                                                    <option selected value="<%- product._id %>"><%- product.name %></option>
+                                                                <% } else { %>
+                                                                    <option value="<%- product._id %>"><%- product.name %></option>
+                                                                <% }%>
+                                                            <%}); %>
+                                                        <% }%>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Module</label>
+                                                <select class="bs-select form-control" required="required" id="module_id" name="module">
+                                                    <option value="">-- Select Module --</option>
+                                                    <% if(typeof modules != "undefined"){ %>
+                                                        <% modules.forEach(function (module) {%>
+                                                            <% if(module._id.equals(task.module)){ %>
+                                                                <option selected value="<%- module._id %>"><%- module.name %></option>
+                                                            <% } else { %>
+                                                                <option value="<%- module._id %>"><%- module.name %></option>
+                                                            <% }%>
+                                                        <%}); %>
+                                                    <% }%>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <select class="bs-select form-control" required="required" name="active">
+                                                    <option value="">-- Status --</option>
+                                                    <% if(task.active == true) { %>
+                                                        <option selected value="true">Active</option>
+                                                        <option value="false">Inactive</option>
+                                                    <% } else { %>
+                                                        <option value="true">Active</option>
+                                                        <option selected value="false">Inactive</option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <textarea rows="3" class="form-control" placeholder="Task Description" name="describe"><%- task.describe %></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn btn-primary pull-right"> Update </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT INNER -->
+            </div>
+        </div>
+        <!-- END PAGE CONTENT BODY -->
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<% block('plugin_js').append('<script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.js" type="text/javascript"></script>') %>
+<% block('plugin_js').append('<script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>') %>
+
+<% block('plugin_js').append('<script src="/custom/js/tasks/task.js" type="text/javascript"></script>') %>

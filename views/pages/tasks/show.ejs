@@ -1,0 +1,103 @@
+<% layout('layout/default') %>
+
+<% block('plugin_css').append('<link href="/assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css"/>') %>
+<% block('plugin_css').append('<link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>') %>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <!-- BEGIN PAGE HEAD-->
+        <div class="page-head">
+            <div class="container">
+                <!-- BEGIN PAGE TITLE -->
+                <div class="page-title">
+                    <h1>Task Details</h1>
+                </div>
+                <!-- END PAGE TITLE -->
+            </div>
+        </div>
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE CONTENT BODY -->
+        <div class="page-content">
+            <div class="container">
+                <!-- BEGIN PAGE BREADCRUMBS -->
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                        <i class="fa fa-circle"></i>
+                    </li>
+                    <li>
+                        <a href="/tasks">Tasks</a>
+                        <i class="fa fa-square"></i>
+                    </li>
+                    <li><span>Task Details</span></li>
+                    <li><i class="fa fa-circle"></i> </li>
+                    <li><i class="glyphicon glyphicon-calendar"></i> <%= new Date(Date.now()).toDateString()  %></li>
+                    <li><i class="fa fa-circle"></i> </li>
+                    <li><i class="glyphicon glyphicon-time"></i> <span id="timer"></span></li>
+                </ul>
+                <!-- END PAGE BREADCRUMBS -->
+                <% include ../../errors/flash %>
+                <!-- BEGIN PAGE CONTENT INNER -->
+                <div class="page-content-inner">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-list font-green"></i>
+                                <span class="caption-subject font-green bold uppercase">Task Details</span>
+                            </div>
+                            <span class="pull-right font-blue bold uppercase"><i class="fa fa-eye"></i> <a href="/tasks/steps/<%= task._id %>">Preview Steps</a></span>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <table class="table table-bordered table-striped table-actions" id="task_table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Task Title</th>
+                                                <td><%- task.name %></td>
+                                                <th>Task Status</th>
+                                                <td>
+                                                    <% if(task.active == true) { %>
+                                                        <span class="label label-success"><i class="fa fa-thumbs-up"></i> Active</span>
+                                                    <% } else { %>
+                                                        <span class="label label-danger"><i class="fa fa-thumbs-down"></i> Inactive</span>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Product</th>
+                                                <td><%- task.product.name %></td>
+                                                <th>Module</th>
+                                                <td><%- task.module.name %></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Sequence</th>
+                                                <td><%- task.order_by %></td>
+                                                <th>Description</th>
+                                                <td>
+                                                    <%- (typeof task.describe != 'undefined')
+                                                            ? ((task.describe != '') ? task.describe : '<span class="label label-danger">nil</span>')
+                                                            : '<span class="label label-danger">nil</span>' %>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT INNER -->
+            </div>
+        </div>
+        <!-- END PAGE CONTENT BODY -->
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<% block('plugin_js').append('<script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.js" type="text/javascript"></script>') %>
+<% block('plugin_js').append('<script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>') %>
