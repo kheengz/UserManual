@@ -139,7 +139,7 @@ module.exports = {
                         res.render('pages/products/index',
                             {
                                 title: 'Products',
-                                error: error
+                                error: err
                             });
                     }
                     else {

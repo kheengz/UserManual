@@ -113,7 +113,17 @@ module.exports = function(passport) {
 
                 // if the user is found but the password is wrong
                 if (!user.comparePassword(password))
-                return done(null, false, req.flash('danger', 'Oops! Wrong password')); // create the loginMessage and save it to session as flashdata
+                    return done(null, false, req.flash('danger', 'Oops! Wrong password')); // create the loginMessage and save it to session as flashdata
+
+                // if the user account has not being verified, return the message
+                if (user.account_verified === false)
+                    return done(null, false, req.flash('danger',
+                        'This user account has not being verified, kindly click on the link sent to this mail ' + user.email + '... thank you'));
+
+                // if the user account has not being verified, return the message
+                if (user.active === false)
+                    return done(null, false, req.flash('danger',
+                        'This user account has not deactivated from the system, kindly your system administrator... thank you'));
 
                 req.session.user = user;
                 // all is well, return successful user

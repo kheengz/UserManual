@@ -14,6 +14,8 @@ module.exports = {
     register : function(req, res, next){
         UserType.find().exec()
             .then(function (userTypes) {
+                // res.json(userTypes);
+                // console.log(userTypes);
                 res.render('auth/register',{title:'Register',userTypes: userTypes});
             },function (err) {
                 console.log("error ",err);

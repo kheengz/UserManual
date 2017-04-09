@@ -24,7 +24,6 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage, limits:{fileSize:1000000} }).single('image_url');
 
-
 module.exports = {
 
     index: function (req, res) {

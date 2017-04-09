@@ -18,6 +18,9 @@ $(function () {
         clone_row.children(':nth-child(4)').children('input').val('');
         clone_row.children(':nth-child(5)').children('textarea').val('');
         clone_row.children(':nth-child(6)').html('');
+        clone_row.children(':nth-child(7)').html(0);
+        // clone_row.children(':nth-child(6)').html('<button class="btn btn-info btn-rounded btn-condensed btn-xs product_image" rel="-1">\
+        //     <span class="fa fa-file-picture-o"></span> Upload </button>');
         clone_row.children(':last-child').html('<button class="btn btn-danger btn-rounded btn-condensed btn-xs remove_product"><span class="fa fa-times"></span> Remove</button>');
     });
 
