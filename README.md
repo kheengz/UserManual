@@ -1,6 +1,6 @@
 
 
-[![Smart User Manual Logo](/Users/kheengz/Workspace/Node/UserManual/public/assets/global/img/manual.jpg)]
+[![Smart User Manual Logo](http://www.illinoisfire.com/wp-content/uploads/2017/02/instruction-icon.png)]
 
 Smart User Manual is an integrated web application that enables developers / designers to be able to provide a more friendly and ease to user helper manual which
 consists of directions and descriptions ono how to navigate through the app while seeking to perform and complete a task or feature.   
